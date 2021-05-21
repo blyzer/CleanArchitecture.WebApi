@@ -51,12 +51,12 @@ namespace Infrastructure.Identity.Services
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.FindByEmailAsync(request.Email).ConfigureAwait(false);
             if (user == null)
             {
                 throw new ApiException($"No Accounts Registered with {request.Email}.");
             }
-            var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false).ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 throw new ApiException($"Invalid Credentials for '{request.Email}'.");
@@ -65,12 +65,15 @@ namespace Infrastructure.Identity.Services
             {
                 throw new ApiException($"Account Not Confirmed for '{request.Email}'.");
             }
-            JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
-            AuthenticationResponse response = new AuthenticationResponse();
-            response.Id = user.Id;
-            response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            response.Email = user.Email;
-            response.UserName = user.UserName;
+            JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user).ConfigureAwait(false);
+            AuthenticationResponse response = new()
+            {
+                Id = user.Id,
+                JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                Email = user.Email,
+                UserName = user.UserName
+            };
+
             var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
             response.Roles = rolesList.ToList();
             response.IsVerified = user.EmailConfirmed;
@@ -81,7 +84,7 @@ namespace Infrastructure.Identity.Services
 
         public async Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)
         {
-            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
+            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
             if (userWithSameUserName != null)
             {
                 throw new ApiException($"Username '{request.UserName}' is already taken.");
@@ -93,16 +96,16 @@ namespace Infrastructure.Identity.Services
                 LastName = request.LastName,
                 UserName = request.UserName
             };
-            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
+            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email).ConfigureAwait(false);
             if (userWithSameEmail == null)
             {
-                var result = await _userManager.CreateAsync(user, request.Password);
+                var result = await _userManager.CreateAsync(user, request.Password).ConfigureAwait(false);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, Roles.Basic.ToString());
-                    var verificationUri = await SendVerificationEmail(user, origin);
+                    await _userManager.AddToRoleAsync(user, nameof(Roles.Basic)).ConfigureAwait(false);
+                    var verificationUri = await SendVerificationEmail(user, origin).ConfigureAwait(false);
                     //TODO: Attach Email Service here and configure it via appsettings
-                    await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+                    await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" }).ConfigureAwait(false);
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
                 }
                 else
@@ -118,8 +121,8 @@ namespace Infrastructure.Identity.Services
 
         private async Task<JwtSecurityToken> GenerateJWToken(ApplicationUser user)
         {
-            var userClaims = await _userManager.GetClaimsAsync(user);
-            var roles = await _userManager.GetRolesAsync(user);
+            var userClaims = await _userManager.GetClaimsAsync(user).ConfigureAwait(false);
+            var roles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 
             var roleClaims = new List<Claim>();
 
@@ -153,20 +156,23 @@ namespace Infrastructure.Identity.Services
             return jwtSecurityToken;
         }
 
-        private string RandomTokenString()
+        private string RandomTokenString
         {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-            var randomBytes = new byte[40];
-            rngCryptoServiceProvider.GetBytes(randomBytes);
-            // convert random bytes to hex string
-            return BitConverter.ToString(randomBytes).Replace("-", "");
+            get
+            {
+                using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+                var randomBytes = new byte[40];
+                rngCryptoServiceProvider.GetBytes(randomBytes);
+                // convert random bytes to hex string
+                return BitConverter.ToString(randomBytes).Replace("-", "");
+            }
         }
 
         private async Task<string> SendVerificationEmail(ApplicationUser user, string origin)
         {
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var route = "api/account/confirm-email/";
+            const string route = "api/account/confirm-email/";
             var _enpointUri = new Uri(string.Concat($"{origin}/", route));
             var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.Id);
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
@@ -176,9 +182,9 @@ namespace Infrastructure.Identity.Services
 
         public async Task<Response<string>> ConfirmEmailAsync(string userId, string code)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            var result = await _userManager.ConfirmEmailAsync(user, code);
+            var result = await _userManager.ConfirmEmailAsync(user, code).ConfigureAwait(false);
             if (result.Succeeded)
             {
                 return new Response<string>(user.Id, message: $"Account Confirmed for {user.Email}. You can now use the /api/Account/authenticate endpoint.");
@@ -193,7 +199,7 @@ namespace Infrastructure.Identity.Services
         {
             return new RefreshToken
             {
-                Token = RandomTokenString(),
+                Token = RandomTokenString,
                 Expires = DateTime.UtcNow.AddDays(7),
                 Created = DateTime.UtcNow,
                 CreatedByIp = ipAddress
@@ -202,12 +208,12 @@ namespace Infrastructure.Identity.Services
 
         public async Task ForgotPassword(ForgotPasswordRequest model, string origin)
         {
-            var account = await _userManager.FindByEmailAsync(model.Email);
+            var account = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
 
             // always return ok response to prevent email enumeration
             if (account == null) return;
 
-            var code = await _userManager.GeneratePasswordResetTokenAsync(account);
+            var code = await _userManager.GeneratePasswordResetTokenAsync(account).ConfigureAwait(false);
             var route = "api/account/reset-password/";
             var _enpointUri = new Uri(string.Concat($"{origin}/", route));
             var emailRequest = new EmailRequest()
@@ -216,14 +222,14 @@ namespace Infrastructure.Identity.Services
                 To = model.Email,
                 Subject = "Reset Password",
             };
-            await _emailService.SendAsync(emailRequest);
+            await _emailService.SendAsync(emailRequest).ConfigureAwait(false);
         }
 
         public async Task<Response<string>> ResetPassword(ResetPasswordRequest model)
         {
-            var account = await _userManager.FindByEmailAsync(model.Email);
+            var account = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
             if (account == null) throw new ApiException($"No Accounts Registered with {model.Email}.");
-            var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
+            var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password).ConfigureAwait(false);
             if (result.Succeeded)
             {
                 return new Response<string>(model.Email, message: $"Password Resetted.");

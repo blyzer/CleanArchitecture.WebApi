@@ -27,14 +27,14 @@ namespace Infrastructure.Identity.Seeds
             };
             if (userManager.Users.All(u => u.Id != defaultUser.Id))
             {
-                var user = await userManager.FindByEmailAsync(defaultUser.Email);
+                var user = await userManager.FindByEmailAsync(defaultUser.Email).ConfigureAwait(false);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(defaultUser, "123Pa$$word!");
-                    await userManager.AddToRoleAsync(defaultUser, Roles.Basic.ToString());
-                    await userManager.AddToRoleAsync(defaultUser, Roles.Moderator.ToString());
-                    await userManager.AddToRoleAsync(defaultUser, Roles.Admin.ToString());
-                    await userManager.AddToRoleAsync(defaultUser, Roles.SuperAdmin.ToString());
+                    await userManager.CreateAsync(defaultUser, "123Pa$$word!").ConfigureAwait(false);
+                    await userManager.AddToRoleAsync(defaultUser, nameof(Roles.Basic)).ConfigureAwait(false);
+                    await userManager.AddToRoleAsync(defaultUser, nameof(Roles.Moderator)).ConfigureAwait(false);
+                    await userManager.AddToRoleAsync(defaultUser, nameof(Roles.Admin)).ConfigureAwait(false);
+                    await userManager.AddToRoleAsync(defaultUser, nameof(Roles.SuperAdmin)).ConfigureAwait(false);
                 }
 
             }

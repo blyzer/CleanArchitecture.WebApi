@@ -34,7 +34,7 @@ namespace Application.Features.Products.Commands.CreateProduct
 
         private async Task<bool> IsUniqueBarcode(string barcode, CancellationToken cancellationToken)
         {
-            return await productRepository.IsUniqueBarcodeAsync(barcode);
+            return await productRepository.IsUniqueBarcodeAsync(barcode).ConfigureAwait(false);
         }
     }
 }
