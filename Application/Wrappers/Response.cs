@@ -9,7 +9,7 @@ namespace Application.Wrappers
         public Response()
         {
         }
-        public Response(T data,string message = null)
+        public Response(T data, string message = null)
         {
             Succeeded = true;
             Message = message;

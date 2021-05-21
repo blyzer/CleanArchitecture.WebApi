@@ -6,8 +6,9 @@
     <Company>Enver</Company>
     <RepositoryUrl>https://github.com/blyzer/CleanArchitecture.WebApi</RepositoryUrl>
     <RepositoryType>Public</RepositoryType>
-    <Version>1.1.0</Version>
-	<LangVersion>latest</LangVersion>
+    <Version>1.2</Version>
+	  <LangVersion>latest</LangVersion>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

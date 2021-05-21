@@ -29,7 +29,7 @@ namespace Application.Features.Products.Commands.CreateProduct
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull()
                 .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
-                
+
         }
 
         private async Task<bool> IsUniqueBarcode(string barcode, CancellationToken cancellationToken)

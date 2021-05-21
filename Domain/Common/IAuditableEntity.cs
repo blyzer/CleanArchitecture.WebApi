@@ -14,4 +14,4 @@ namespace Domain.Common
         public string LastModifiedBy { get; set; }
         public DateTime? LastModified { get; set; }
     }
-} 
+}

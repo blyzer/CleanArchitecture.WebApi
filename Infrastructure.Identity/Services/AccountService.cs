@@ -34,10 +34,10 @@ namespace Infrastructure.Identity.Services
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
-        public AccountService(UserManager<ApplicationUser> userManager, 
-            RoleManager<IdentityRole> roleManager, 
-            IOptions<JWTSettings> jwtSettings, 
-            IDateTimeService dateTimeService, 
+        public AccountService(UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IOptions<JWTSettings> jwtSettings,
+            IDateTimeService dateTimeService,
             SignInManager<ApplicationUser> signInManager,
             IEmailService emailService)
         {
@@ -161,7 +161,7 @@ namespace Infrastructure.Identity.Services
             // convert random bytes to hex string
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
-        
+
         private async Task<string> SendVerificationEmail(ApplicationUser user, string origin)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -179,7 +179,7 @@ namespace Infrastructure.Identity.Services
             var user = await _userManager.FindByIdAsync(userId);
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return new Response<string>(user.Id, message: $"Account Confirmed for {user.Email}. You can now use the /api/Account/authenticate endpoint.");
             }
@@ -224,7 +224,7 @@ namespace Infrastructure.Identity.Services
             var account = await _userManager.FindByEmailAsync(model.Email);
             if (account == null) throw new ApiException($"No Accounts Registered with {model.Email}.");
             var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return new Response<string>(model.Email, message: $"Password Resetted.");
             }

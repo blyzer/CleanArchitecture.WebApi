@@ -30,7 +30,7 @@ namespace WebApi.Controllers
             return Ok(await _accountService.RegisterAsync(request, origin));
         }
         [HttpGet("confirm-email")]
-        public async Task<IActionResult> ConfirmEmailAsync([FromQuery]string userId, [FromQuery]string code)
+        public async Task<IActionResult> ConfirmEmailAsync([FromQuery] string userId, [FromQuery] string code)
         {
             var origin = Request.Headers["origin"];
             return Ok(await _accountService.ConfirmEmailAsync(userId, code));
@@ -44,7 +44,7 @@ namespace WebApi.Controllers
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
-            
+
             return Ok(await _accountService.ResetPassword(model));
         }
         private string GenerateIPAddress()
