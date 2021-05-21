@@ -40,3 +40,14 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - None
+
+
+<a name="1.2.0"></a>
+## [1.2.0](https://www.github.com/blyzer/CleanArchitecture.WebApi/releases/tag/v1.2.0) (2021-5-21)
+
+### Features
+
+* code vs ([36e6e1b](https://www.github.com/blyzer/CleanArchitecture.WebApi/commit/36e6e1b1a388217e0f7ecf15512aaf5088a76025))
+* Implement Type parameter ([ff2ece3](https://www.github.com/blyzer/CleanArchitecture.WebApi/commit/ff2ece39b32e79f28deeadf475cab30db351344e))
+* migrate to .NET5 ([c4ac6f2](https://www.github.com/blyzer/CleanArchitecture.WebApi/commit/c4ac6f2bc1ef9405aef7c8ebea8db4acbe705cff))
+
