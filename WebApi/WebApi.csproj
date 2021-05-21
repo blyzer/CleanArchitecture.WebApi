@@ -2,11 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Authors>Mukesh Murugan</Authors>
-    <Company>codewithmukesh</Company>
-    <RepositoryUrl>https://github.com/iammukeshm/CleanArchitecture.WebApi</RepositoryUrl>
+    <Authors>Enver Francisco</Authors>
+    <Company>Enver</Company>
+    <RepositoryUrl>https://github.com/blyzer/CleanArchitecture.WebApi</RepositoryUrl>
     <RepositoryType>Public</RepositoryType>
-    <PackageProjectUrl>https://www.codewithmukesh.com/blog/aspnet-core-webapi-clean-architecture/</PackageProjectUrl>
     <Version>1.1.0</Version>
 	<LangVersion>latest</LangVersion>
   </PropertyGroup>

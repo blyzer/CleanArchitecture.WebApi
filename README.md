@@ -105,10 +105,11 @@ You can use these default credentials to generate valid JWTokens at the ../api/a
 
 Does it really make sense to Setup your ASP.NET Core Solution everytime you start a new WebApi Project ? Aren't we wasting quite a lot of time in doing this over and over gain?
 
-This is the exact Problem that I intend to solve with this Full-Fledged ASP.NET Core 3.1 WebApi Solution Template, that also follows various principles of Clean Architecture.
+This is the exact Problem that I intend to solve with this Full-Fledged ASP.NET Core 5.0 WebApi Solution Template, that also follows various principles of Clean Architecture.
 
 The primary goal is to create a Full-Fledged implementation, that is well documented along with the steps taken to build this Solution from Scratch. This Solution Template will also be available within Visual Studio 2019 (by installing the required Nuget Package / Extension).
-- Demonstrate Clean Monolith Architecture in ASP.NET Core 3.1 
+
+- Demonstrate Clean Monolith Architecture in ASP.NET Core 3.1
 - This is not a Proof of Concept
 - Implementation that is ready for Production
 - Integrate the most essential libraries and packages
@@ -118,9 +119,9 @@ If you found this Implementation helpful or used it in your Projects, do give it
 Or, If you are feeling really generous, [Support the Project with a small contribution!](https://www.buymeacoffee.com/codewithmukesh)
 
 ## Technologies
-- ASP.NET Core 3.1 WebApi
+- ASP.NET Core 5.0 WebApi
 - REST Standards
-- .NET Core 3.1 / Standard 2.1 Libraries
+- .NET 5.0 / Standard 2.1 Libraries
 
 ## Features
 - [x] Onion Architecture
@@ -148,39 +149,33 @@ Or, If you are feeling really generous, [Support the Project with a small contri
 - [x] Complete User Management Module (Register / Generate Token / Forgot Password / Confirmation Mail)
 - [x] User Auditing
 
-## Brief Overview
-![alt text](https://www.codewithmukesh.com/wp-content/uploads/2020/06/Onion-Architecture-In-ASP.NET-Core.png)
-
 ## Prerequisites
+
 - Visual Studio 2019 Community and above
-- .NET Core 3.1 SDK and above
+- .NET 5.0 SDK and above
 - Basic Understanding of Architectures and Clean Code Principles
-- I Recommend that you read [Onion Architecture In ASP.NET Core With CQRS – Detailed](https://www.codewithmukesh.com/blog/onion-architecture-in-aspnet-core/) article to understand this implementation much better. This project is just an Advanced Version of the mentioned article.
 
 ## Getting Started
 
 ## Changelog
-Every changes / additions / deletions will be recorded in the [Changelog file](https://github.com/iammukeshm/CleanArchitecture.WebApi/blob/master/CHANGELOG.md).
+
+Every changes / additions / deletions will be recorded in the [Changelog file](https://github.com/blyzer/CleanArchitecture.WebApi/blob/master/CHANGELOG.md).
 
 ## Questions? Bugs? Suggestions for Improvement?
-Having any issues or troubles getting started? [Get in touch with me](https://www.codewithmukesh.com/contact) or [Raise a Bug or Feature Request](https://github.com/iammukeshm/CleanArchitecture.WebApi/issues/new/choose). Always happy to help.
 
-## Support
-Has this Project helped you learn something New? or Helped you at work? Do Consider Supporting.
-
-<a href="https://www.buymeacoffee.com/codewithmukesh" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" width="200"  ></a>
+Raise a Bug or Feature Request](https://github.com/blyzer/CleanArchitecture.WebApi/issues/new/choose). Always happy to help.
 
 ## Share it!
+
 I have personally not come across a clean implementation on a WebAPI, which is the reason that I started building this up. There are quite a lot of improvements and fixes along the way from the day I started out. Thanks to the community for the support and suggestions.
 Please share this Repository within your developer community, if you think that this would a difference! Thanks.
 
 ## About the Author
-### Mukesh Murugan
-- Blogs at [codewithmukesh.com](https://www.codewithmukesh.com)
-- Facebook - [codewithmukesh](https://www.facebook.com/codewithmukesh)
-- Twitter - [Mukesh Murugan](https://www.twitter.com/iammukeshm)
-- Twitter - [codewithmukesh](https://www.twitter.com/codewithmukesh)
-- Linkedin - [Mukesh Murugan](https://www.linkedin.com/in/iammukeshm/)
+
+### Enver Francisco
+
+- Twitter - [Enver Francisco](https://www.twitter.com/blyzer)
+- Linkedin - [Enver Francisco](https://do.linkedin.com/in/blyzer/)
 
 ## Licensing
-iammukeshm/CleanArchitecture.WebApi Project is licensed with the [MIT License](https://github.com/iammukeshm/CleanArchitecture.WebApi/blob/master/LICENSE).
+blyzer/CleanArchitecture.WebApi Project is licensed with the [MIT License](https://github.com/blyzer/CleanArchitecture.WebApi/blob/master/LICENSE).

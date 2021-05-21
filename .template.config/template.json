@@ -1,5 +1,5 @@
 {
-  "author": "Mukesh Murugan",
+  "author": "Enver Francisco",
   "classifications": [],
   "description": "An ASP.NET Core WebAPI Solution Template that is built with Loosely-Coupled and Inverted-Dependency / Onion Architecture along with various other essential integrations.",
   "name": "Clean Architecture WebAPI",
