@@ -6,7 +6,7 @@
     <Company>Enver</Company>
     <RepositoryUrl>https://github.com/blyzer/CleanArchitecture.WebApi</RepositoryUrl>
     <RepositoryType>Public</RepositoryType>
-    <Version>1.2</Version>
+    <Version>1.2.0</Version>
 	  <LangVersion>latest</LangVersion>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
