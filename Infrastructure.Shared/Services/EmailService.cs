@@ -27,17 +27,23 @@ namespace Infrastructure.Shared.Services
             try
             {
                 // create message
-                var email = new MimeMessage();
-                email.Sender = new MailboxAddress(_mailSettings.DisplayName, request.From ?? _mailSettings.EmailFrom);
+                MimeMessage email = new()
+                {
+                    Sender = new MailboxAddress(_mailSettings.DisplayName, request.From ?? _mailSettings.EmailFrom)
+                };
                 email.To.Add(MailboxAddress.Parse(request.To));
                 email.Subject = request.Subject;
-                var builder = new BodyBuilder();
-                builder.HtmlBody = request.Body;
+
+                BodyBuilder builder = new()
+                {
+                    HtmlBody = request.Body
+                };
+
                 email.Body = builder.ToMessageBody();
                 using var smtp = new SmtpClient();
                 smtp.Connect(_mailSettings.SmtpHost, _mailSettings.SmtpPort, SecureSocketOptions.StartTls);
                 smtp.Authenticate(_mailSettings.SmtpUser, _mailSettings.SmtpPass);
-                await smtp.SendAsync(email);
+                await smtp.SendAsync(email).ConfigureAwait(false);
                 smtp.Disconnect(true);
 
             }
