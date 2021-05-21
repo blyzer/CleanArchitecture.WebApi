@@ -29,7 +29,8 @@ namespace Infrastructure.Persistence
                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             }
             #region Repositories
-            services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
+            services.AddTransient(typeof(IGenericRepositoryAsync<,>), typeof(GenericRepositoryAsync<,>));
+            services.AddTransient<IGenericUnitOfWork, GenericUnitOfWork>();
             services.AddTransient<IProductRepositoryAsync, ProductRepositoryAsync>();
             #endregion
         }

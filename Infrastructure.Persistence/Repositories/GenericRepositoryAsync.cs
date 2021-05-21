@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Repository
 {
-    public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : class
+    public class GenericRepositoryAsync<T, TId> : IGenericRepositoryAsync<T, TId> where T : class
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -18,9 +18,10 @@ namespace Infrastructure.Persistence.Repository
             _dbContext = dbContext;
         }
 
-        public virtual async Task<T> GetByIdAsync(int id)
+        public virtual async Task<T> GetByIdAsync(TId id)
         {
-            return await _dbContext.Set<T>().FindAsync(id);
+            return await _dbContext.Set<T>().FindAsync(id)
+                .ConfigureAwait(false);
         }
 
         public async Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize)
@@ -30,33 +31,42 @@ namespace Infrastructure.Persistence.Repository
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         public async Task<T> AddAsync(T entity)
         {
-            await _dbContext.Set<T>().AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.Set<T>().AddAsync(entity)
+                .ConfigureAwait(false);
             return entity;
         }
 
-        public async Task UpdateAsync(T entity)
+        public Task UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return Task.CompletedTask;
         }
 
-        public async Task DeleteAsync(T entity)
+        public Task DeleteAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
-            await _dbContext.SaveChangesAsync();
+            return Task.CompletedTask;
         }
 
         public async Task<IReadOnlyList<T>> GetAllAsync()
         {
             return await _dbContext
                  .Set<T>()
-                 .ToListAsync();
+                 .ToListAsync()
+                .ConfigureAwait(false);
+        }
+    }
+
+    public class GenericRepositoryAsync<T> : GenericRepositoryAsync<T, int>, IGenericRepositoryAsync<T> where T : class
+    {
+        public GenericRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
+        {
         }
     }
 }

@@ -10,22 +10,26 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Products.Commands.DeleteProductById
 {
-    public class DeleteProductByIdCommand : IRequest<Response<int>>
+    public class DeleteProductByIdCommand : IRequest<Response<Guid>>
     {
-        public int Id { get; set; }
-        public class DeleteProductByIdCommandHandler : IRequestHandler<DeleteProductByIdCommand, Response<int>>
+        public Guid Id { get; set; }
+        public class DeleteProductByIdCommandHandler : IRequestHandler<DeleteProductByIdCommand, Response<Guid>>
         {
             private readonly IProductRepositoryAsync _productRepository;
-            public DeleteProductByIdCommandHandler(IProductRepositoryAsync productRepository)
+            private readonly IGenericUnitOfWork _unitOfWork;
+
+            public DeleteProductByIdCommandHandler(IProductRepositoryAsync productRepository, IGenericUnitOfWork unitOfWork)
             {
                 _productRepository = productRepository;
+                _unitOfWork = unitOfWork;
             }
-            public async Task<Response<int>> Handle(DeleteProductByIdCommand command, CancellationToken cancellationToken)
+            public async Task<Response<Guid>> Handle(DeleteProductByIdCommand command, CancellationToken cancellationToken)
             {
-                var product = await _productRepository.GetByIdAsync(command.Id);
+                var product = await _productRepository.GetByIdAsync(command.Id).ConfigureAwait(false);
                 if (product == null) throw new ApiException($"Product Not Found.");
-                await _productRepository.DeleteAsync(product);
-                return new Response<int>(product.Id);
+                await _productRepository.DeleteAsync(product).ConfigureAwait(false);
+                await _unitOfWork.Commit<Guid>(cancellationToken).ConfigureAwait(false);
+                return new Response<Guid>(product.Id);
             }
         }
     }

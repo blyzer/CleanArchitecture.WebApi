@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories
 {
-    public class ProductRepositoryAsync : GenericRepositoryAsync<Product>, IProductRepositoryAsync
+    public class ProductRepositoryAsync : GenericRepositoryAsync<Product, Guid>, IProductRepositoryAsync
     {
         private readonly DbSet<Product> _products;
 

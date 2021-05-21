@@ -24,14 +24,14 @@ namespace WebApi.Controllers.v1
         public async Task<IActionResult> Get([FromQuery] GetAllProductsParameter filter)
         {
           
-            return Ok(await Mediator.Send(new GetAllProductsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber  }));
+            return Ok(await Mediator.Send(new GetAllProductsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber  }).ConfigureAwait(false));
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            return Ok(await Mediator.Send(new GetProductByIdQuery { Id = id }));
+            return Ok(await Mediator.Send(new GetProductByIdQuery { Id = id }).ConfigureAwait(false));
         }
 
         // POST api/<controller>
@@ -39,27 +39,27 @@ namespace WebApi.Controllers.v1
         [Authorize]
         public async Task<IActionResult> Post(CreateProductCommand command)
         {
-            return Ok(await Mediator.Send(command));
+            return Ok(await Mediator.Send(command).ConfigureAwait(false));
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(int id, UpdateProductCommand command)
+        public async Task<IActionResult> Put(Guid id, UpdateProductCommand command)
         {
             if (id != command.Id)
             {
                 return BadRequest();
             }
-            return Ok(await Mediator.Send(command));
+            return Ok(await Mediator.Send(command).ConfigureAwait(false));
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            return Ok(await Mediator.Send(new DeleteProductByIdCommand { Id = id }));
+            return Ok(await Mediator.Send(new DeleteProductByIdCommand { Id = id }).ConfigureAwait(false));
         }
     }
 }

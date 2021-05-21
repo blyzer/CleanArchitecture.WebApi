@@ -25,9 +25,14 @@ namespace Infrastructure.Persistence.Contexts
         }
         public DbSet<Product> Products { get; set; }
 
+        /// <inheritdoc/>
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
+            return base.SaveChangesAsync(cancellationToken);
+        }
+        public Task<int> SaveChangesAsync<TType>(CancellationToken cancellationToken = new CancellationToken())
+        {
+            foreach (var entry in ChangeTracker.Entries<IAuditableEntity<TType>>())
             {
                 switch (entry.State)
                 {
@@ -41,7 +46,7 @@ namespace Infrastructure.Persistence.Contexts
                         break;
                 }
             }
-            return base.SaveChangesAsync(cancellationToken);
+            return SaveChangesAsync(cancellationToken);
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
